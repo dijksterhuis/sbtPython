@@ -45,7 +45,7 @@ testPythonTask := {
   val baseDir = baseDirectory.value
   s.log.info("Executing task testPython")
   lazy val result: Int = Process("python3 -m unittest src.test.python.test_main").!
-  assert(result == 0)
+  if(result != 0){sys.error("Python tests failed!")}
 }
 
 //attach custom test task to default test tasks
