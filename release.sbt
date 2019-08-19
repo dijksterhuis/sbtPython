@@ -25,7 +25,7 @@ releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,                    // : ReleaseStep
   inquireVersions,                              // : ReleaseStep
   runClean,                                     // : ReleaseStep
-  runTest,                                      // : ReleaseStep, n.b. pythonTestTask hack won't kill release if tests fail
+  runTest,                                      // : ReleaseStep
   setReleaseVersion,                            // : ReleaseStep
   commitReleaseVersion,                         // : ReleaseStep, performs the initial git checks
   tagRelease,                                   // : ReleaseStep
