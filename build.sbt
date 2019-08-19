@@ -1,4 +1,5 @@
 import Dependencies._
+import scala.sys.process._
 
 ThisBuild / scalaVersion     := "2.12.8"
 ThisBuild / organization     := "org.dijksterhuis"
@@ -29,10 +30,33 @@ lazy val root = (project in file("."))
     libraryDependencies += scalaTest % Test
   )
 
+
 // -- Plugins
 enablePlugins(GitVersioning)
 enablePlugins(sbtdocker.DockerPlugin)
 enablePlugins(GitBranchPrompt)
+
+// -- Python tests
+// https://stackoverflow.com/a/48415997
+val testPythonTask = TaskKey[Unit]("testPython", "Run python tests.")
+fork in testPythonTask := true
+testPythonTask := {
+  val s: TaskStreams = streams.value
+  val baseDir = baseDirectory.value
+  s.log.info("Executing task testPython")
+  lazy val result: Int = Process("python3 -m unittest src.test.python.test_main").!
+  assert(result == 0)
+}
+
+//attach custom test task to default test tasks
+test in Test := {
+  testPythonTask.value
+  (test in Test).value
+}
+testOnly in Test := {
+  testPythonTask.value
+  (testOnly in Test).inputTaskValue
+}
 
 // -- python packaging
 // TODO
@@ -58,16 +82,20 @@ imageNames in docker := Seq(
 )
 
 dockerfile in docker := {
-  // -- TODO - Copy over staging files inside specified directories
-  // https://github.com/marcuslonnberg/sbt-docker/blob/master/src/main/scala/sbtdocker/Instructions.scala#L314
-  val baseDir = baseDirectory.value
-  val appDir = baseDir + "/main/python"
+  val username = "python"
+  val appDir = "src/main/python"
   val targetDir = "/app"
+  val requirementsFile = "requirements.txt"
   
   new Dockerfile {
     from("python:3")
-    // -- TODO - see above w.r.t. copying files from staging
-    //copyRaw(appDir, targetDir)
-    cmd("echo", "\"hello world!\"")
+    run("useradd", "-ms", "/bin/bash", username)
+    // copy python files to staging area first, then copy to image
+    stageFile(file(appDir), targetDir)
+    copyRaw(targetDir, targetDir)
+    run("chown", "-R", username + ":" + username, targetDir)
+    run("chmod", "-R", "+x", targetDir)
+    user(username)
+    cmd("/app/main.py")
   }
 }

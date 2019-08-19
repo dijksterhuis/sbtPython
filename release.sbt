@@ -22,16 +22,16 @@ lazy val pushDocker = ReleaseStep(action = st => {
 })
 
 releaseProcess := Seq[ReleaseStep](
-  checkSnapshotDependencies,              // : ReleaseStep
-  inquireVersions,                        // : ReleaseStep
-  runClean,                               // : ReleaseStep
-  runTest,                                // : ReleaseStep
-  setReleaseVersion,                      // : ReleaseStep
-  commitReleaseVersion,                   // : ReleaseStep, performs the initial git checks
-  tagRelease,                             // : ReleaseStep
-  buildDocker,                            // : ReleaseStep, build the docker images
-  pushDocker,                             // : ReleaseStep, push the docker image
-  setNextVersion,                         // : ReleaseStep
-  commitNextVersion,                      // : ReleaseStep
-  pushChanges                             // : ReleaseStep, also checks that an upstream branch is properly configured
+  checkSnapshotDependencies,                    // : ReleaseStep
+  inquireVersions,                              // : ReleaseStep
+  runClean,                                     // : ReleaseStep
+  runTest,                                      // : ReleaseStep, n.b. pythonTestTask hack won't kill release if tests fail
+  setReleaseVersion,                            // : ReleaseStep
+  commitReleaseVersion,                         // : ReleaseStep, performs the initial git checks
+  tagRelease,                                   // : ReleaseStep
+  buildDocker,                                  // : ReleaseStep, build the docker images
+  pushDocker,                                   // : ReleaseStep, push the docker image
+  setNextVersion,                               // : ReleaseStep
+  commitNextVersion,                            // : ReleaseStep
+  pushChanges                                   // : ReleaseStep, also checks that an upstream branch is properly configured
 )
