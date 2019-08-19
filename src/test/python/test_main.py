@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
-import unitttest
-from main.python.main import main
+import unittest
 
-def test_main():
-    print("Hello from test!!")
+from src.main.python.main import main
+
+class TestStringMethods(unittest.TestCase):
+    def test_main_output(self):
+        self.assertEqual(main(), "Hello from main!")
     
 if __name__ == '__main__':
-    test_main()
+    unittest.main()
