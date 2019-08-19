@@ -33,5 +33,5 @@ releaseProcess := Seq[ReleaseStep](
   pushDocker,                             // : ReleaseStep, push the docker image
   setNextVersion,                         // : ReleaseStep
   commitNextVersion,                      // : ReleaseStep
-  //pushChanges                             // : ReleaseStep, also checks that an upstream branch is properly configured
+  pushChanges                             // : ReleaseStep, also checks that an upstream branch is properly configured
 )
