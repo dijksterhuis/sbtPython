@@ -60,6 +60,8 @@ testOnly in Test := {
 
 // -- python packaging
 // TODO
+// 1. Zip archiving
+// 2. setup.py install?
 
 // -- docker
 buildOptions in docker := BuildOptions(
