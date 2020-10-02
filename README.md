@@ -6,7 +6,7 @@ A basic sbt template for python projects.
 - Release process includes docker build and push
 - Automated github releases
 
-### TO DO
+### To Do
 - Convert to g8 template
 - Input for name of package
 - Testing python package
